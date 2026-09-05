@@ -1,0 +1,1412 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistem Inventaris PT Pertamina Hulu Rokan</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #333;
+      overflow: hidden;
+    }
+    
+    .slide-container {
+      width: 100vw;
+      height: 100vh;
+      position: relative;
+      background-color: #f5f5f5;
+    }
+    
+    .slide {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      padding: 40px;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background-color: white;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    .slide.active {
+      opacity: 1;
+      z-index: 1;
+    }
+    
+    .slide-header {
+      display: flex;
+      align-items: center;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding: 15px 40px;
+      background-color: #D12E26;
+      color: white;
+    }
+    
+    .logo {
+      height: 50px;
+      margin-right: 20px;
+    }
+    
+    .slide-footer {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      padding: 10px 40px;
+      background-color: #f5f5f5;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid #ddd;
+    }
+    
+    .slide-number {
+      font-size: 14px;
+      color: #666;
+    }
+    
+    .slide-content {
+      margin: 60px auto 60px auto;
+      max-width: 900px;
+      width: 100%;
+    }
+    
+    h1 {
+      font-size: 36px;
+      margin-bottom: 30px;
+      color: #D12E26;
+    }
+    
+    h2 {
+      font-size: 28px;
+      margin-bottom: 20px;
+      color: #D12E26;
+    }
+    
+    p {
+      font-size: 20px;
+      line-height: 1.6;
+      margin-bottom: 15px;
+    }
+    
+    ul, ol {
+      margin: 20px 0;
+      padding-left: 25px;
+    }
+    
+    li {
+      font-size: 20px;
+      margin-bottom: 15px;
+      line-height: 1.4;
+    }
+    
+    .navigation {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      display: flex;
+      z-index: 10;
+    }
+    
+    .nav-btn {
+      background-color: #D12E26;
+      color: white;
+      border: none;
+      width: 50px;
+      height: 50px;
+      border-radius: 25px;
+      font-size: 20px;
+      margin: 0 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    
+    .nav-btn:hover {
+      background-color: #B01E16;
+    }
+    
+    .nav-btn:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+    
+    .center-content {
+      text-align: center;
+    }
+    
+    .grid-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .feature-box {
+      background-color: #f9f9f9;
+      padding: 20px;
+      border-radius: 10px;
+      border-left: 5px solid #D12E26;
+    }
+    
+    .feature-box h3 {
+      color: #D12E26;
+      margin-bottom: 10px;
+    }
+    
+    .timeline {
+      margin-top: 30px;
+      position: relative;
+    }
+    
+    .timeline::before {
+      content: '';
+      position: absolute;
+      height: 100%;
+      width: 4px;
+      background-color: #D12E26;
+      left: 0;
+      top: 0;
+    }
+    
+    .timeline-item {
+      margin-left: 30px;
+      padding-bottom: 20px;
+      position: relative;
+    }
+    
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-color: #D12E26;
+      border-radius: 50%;
+      left: -38px;
+      top: 5px;
+    }
+    
+    .chart-placeholder {
+      width: 100%;
+      height: 300px;
+      background-color: #f5f5f5;
+      border: 2px dashed #ccc;
+      border-radius: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 20px 0;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+    
+    th, td {
+      padding: 12px 15px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    
+    th {
+      background-color: #D12E26;
+      color: white;
+    }
+    
+    tr:nth-child(even) {
+      background-color: #f5f5f5;
+    }
+    
+    .contact-info {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 30px;
+    }
+    
+    .contact-card {
+      text-align: center;
+      padding: 20px;
+      background-color: #f5f5f5;
+      border-radius: 10px;
+      width: 30%;
+    }
+  </style>
+</head>
+<body>
+  <div class="slide-container">
+    <!-- Slide 1 -->
+    <div class="slide active" id="slide1">
+      <div class="slide-header">
+        <img src="/api/placeholder/150/50" alt="Logo Pertamina" class="logo">
+        <h3>PT Pertamina Hulu Rokan Rantau Aceh Tamiang</h3>
+      </div>
+      
+      <div class="slide-content center-content">
+        <h1>SISTEM INVENTARIS TERINTEGRASI</h1>
+        <p>Efisiensi Pengelolaan Aset dan Persediaan</p>
+        <div class="chart-placeholder">
+          <p>Gambar Dashboard Sistem Inventaris</p>
+        </div>
+        <p>PT Pertamina Hulu Rokan Rantau Aceh Tamiang</p>
+        <p>Maret 2025</p>
+      </div>
+      
+      <div class="slide-footer">
+        <span class="slide-number">Slide 1 dari 20</span>
+        <span>Sistem Inventaris Terintegrasi</span>
+      </div>
+    </div>
+    
+    <!-- Slide 2 -->
+    <div class="slide" id="slide2">
+      <div class="slide-header">
+        <img src="/api/placeholder/150/50" alt="Logo Pertamina" class="logo">
+        <h3>PT Pertamina Hulu Rokan Rantau Aceh Tamiang</h3>
+      </div>
+      
+      <div class="slide-content">
+        <h2>DAFTAR ISI</h2>
+        <ol>
+          <li>Pendahuluan dan Latar Belakang</li>
+          <li>Tujuan dan Sasaran Sistem</li>
+          <li>Tantangan Pengelolaan Inventaris Saat Ini</li>
+          <li>Gambaran Umum Sistem Inventaris Baru</li>
+          <li>Fitur dan Kemampuan Utama</li>
+          <li>Arsitektur Sistem</li>
+          <li>Keamanan Data dan Sistem</li>
+          <li>Integrasi dengan Sistem Lain</li>
+          <li>Manfaat Implementasi</li>
+          <li>Analisis Biaya dan Pengembalian Investasi</li>
+          <li>Strategi Implementasi dan Timeline</li>
+          <li>Manajemen Perubahan dan Pelatihan</li>
+          <li>Dukungan Teknis dan Pemeliharaan</li>
+          <li>Indikator Kinerja Utama</li>
+          <li>Rekomendasi</li>
+          <li>Kesimpulan</li>
+        </ol>
+      </div>
+      
+      <div class="slide-footer">
+        <span class="slide-number">Slide 2 dari 20</span>
+        <span>Sistem Inventaris Terintegrasi</span>
+      </div>
+    </div>
+    
+    <!-- Slide 3 -->
+    <div class="slide" id="slide3">
+      <div class="slide-header">
+        <img src="/api/placeholder/150/50" alt="Logo Pertamina" class="logo">
+        <h3>PT Pertamina Hulu Rokan Rantau Aceh Tamiang</h3>
+      </div>
+      
+      <div class="slide-content">
+        <h2>PENDAHULUAN DAN LATAR BELAKANG</h2>
+        <p>PT Pertamina Hulu Rokan Rantau Aceh Tamiang sebagai salah satu unit operasi strategis Pertamina memiliki kebutuhan pengelolaan inventaris yang kompleks meliputi:</p>
+        <ul>
+          <li>Pengelolaan ribuan komponen peralatan dan suku cadang untuk operasi produksi minyak dan gas</li>
+          <li>Kebutuhan akan ketersediaan material yang tepat waktu untuk menunjang operasi di wilayah geografis yang tersebar</li>
+          <li>Tantangan dalam memastikan efisiensi biaya dan optimalisasi stok persediaan</li>
+          <li>Kepatuhan terhadap regulasi dan standar keselamatan dalam pengelolaan material berbahaya</li>
+        </ul>
+        <p>Sistem inventaris yang ada saat ini masih menggunakan beberapa aplikasi terpisah yang belum terintegrasi secara penuh, menyebabkan inefisiensi dan potensi kesalahan dalam pengelolaan aset perusahaan.</p>
+      </div>
+      
+      <div class="slide-footer">
+        <span class="slide-number">Slide 3 dari 20</span>
+        <span>Sistem Inventaris Terintegrasi</span>
+      </div>
+    </div>
+    
+    <!-- Slide 4 -->
+    <div class="slide" id="slide4">
+      <div class="slide-header">
+        <img src="/api/placeholder/150/50" alt="Logo Pertamina" class="logo">
+        <h3>PT Pertamina Hulu Rokan Rantau Aceh Tamiang</h3>
+      </div>
+      
+      <div class="slide-content">
+        <h2>TUJUAN DAN SASARAN SISTEM</h2>
+        <div class="feature-box">
+          <h3>Tujuan Utama</h3>
+          <p>Mengembangkan sistem inventaris terintegrasi yang mampu mengelola seluruh aset dan persediaan PT Pertamina Hulu Rokan secara efisien, akurat, dan real-time.</p>
+        </div>
+        <div class="grid-container">
+          <div class="feature-box">
+            <h3>Sasaran Bisnis</h3>
+            <ul>
+              <li>Mengurangi biaya penyimpanan hingga 20%</li>
+              <li>Meminimalkan downtime operasional karena kekurangan material</li>
+              <li>Meningkatkan akurasi pencatatan inventaris hingga 99.5%</li>
+              <li>Mempercepat proses pengadaan dan distribusi material</li>
+            </ul>
+          </div>
+          <div class="feature-box">
+            <h3>Sasaran Teknis</h3>
+            <ul>
+              <li>Integrasi dengan sistem ERP perusahaan</li>
+              <li>Implementasi sistem barcode/RFID untuk pelacakan aset</li>
+              <li>Akses mobile untuk pekerja lapangan</li>
+              <li>Dashboard analitik untuk pengambilan keputusan</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+      <div class="slide-footer">
+        <span class="slide-number">Slide 4 dari 20</span>
+        <span>Sistem Inventaris Terintegrasi</span>
+      </div>
+    </div>
+    
+    <!-- Slide 5 -->
+    <div class="slide" id="slide5">
+      <div class="slide-header">
+        <img src="/api/placeholder/150/50" alt="Logo Pertamina" class="logo">
+        <h3>PT Pertamina Hulu Rokan Rantau Aceh Tamiang</h3>
+      </div>
+      
+      <div class="slide-content">
+        <h2>TANTANGAN PENGELOLAAN INVENTARIS SAAT INI</h2>
+        <div class="grid-container">
+          <div class="feature-box">
+            <h3>Masalah Operasional</h3>
+            <ul>
+              <li>Pencatatan manual yang rawan kesalahan</li>
+              <li>Waktu pengecekan inventaris yang lama</li>
+              <li>Kesulitan pelacakan lokasi dan status aset</li>
+              <li>Keterlambatan dalam pemenuhan kebutuhan material</li>
+            </ul>
+          </div>
+          <div class="feature-box">
+            <h3>Masalah Teknologi</h3>
+            <ul>
+              <li>Sistem terpisah yang tidak terintegrasi</li>
+              <li>Keterbatasan akses data dari lokasi lapangan</li>
+              <li>Kurangnya kapabilitas analitik untuk prediksi kebutuhan</li>
+              <li>Backup dan keamanan data yang belum memadai</li>
+            </ul>
+          </div>
+        </div>
+        <div class="chart-placeholder">
+          <p>Grafik Analisis Permasalahan Sistem Saat Ini</p>
+        </div>
+      </div>
+      
+      <div class="slide-footer">
+        <span class="slide-number">Slide 5 dari 20</span>
+        <span>Sistem Inventaris Terintegrasi</span>
+      </div>
+    </div>
+    
+    <!-- Slide 6 -->
+    <div class="slide" id="slide6">
+      <div class="slide-header">
+        <img src="/api/placeholder/150/50" alt="Logo Pertamina" class="logo">
+        <h3>PT Pertamina Hulu Rokan Rantau Aceh Tamiang</h3>
+      </div>
+      
+      <div class="slide-content">
+        <h2>GAMBARAN UMUM SISTEM INVENTARIS BARU</h2>
+        <p>Sistem Inventaris Terintegrasi yang diusulkan adalah solusi berbasis web dan mobile yang menghubungkan seluruh proses pengelolaan aset dan persediaan.</p>
+        <div class="chart-placeholder">
+          <p>Diagram Arsitektur Sistem Inventaris Terintegrasi</p>
+        </div>
+        <div class="grid-container">
+          <div class="feature-box">
+            <h3>Komponen Utama</h3>
+            <ul>
+              <li>Portal web untuk manajemen inventaris pusat</li>
+              <li>Aplikasi mobile untuk pengecekan dan transaksi di lapangan</li>
+              <li>Sistem tracking berbasis barcode/RFID</li>
+              <li>Modul pelaporan dan analitik</li>
+            </ul>
+          </div>
+          <div class="feature-box">
+            <h3>Keunggulan Desain</h3>
+            <ul>
+              <li>Arsitektur cloud-native untuk skalabilitas</li>
+              <li>Desain responsif untuk berbagai perangkat</li>
+              <li>Operasi offline dengan sinkronisasi otomatis</li>
+              <li>Integrasi API dengan sistem perusahaan lainnya</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+      <div class="slide-footer">
+        <span class="slide-number">Slide 6 dari 20</span>
+        <span>Sistem Inventaris Terintegrasi</span>
+      </div>
+    </div>
+    
+    <!-- Slide 7 -->
+    <div class="slide" id="slide7">
+      <div class="slide-header">
+        <img src="/api/placeholder/150/50" alt="Logo Pertamina" class="logo">
+        <h3>PT Pertamina Hulu Rokan Rantau Aceh Tamiang</h3>
+      </div>
+      
+      <div class="slide-content">
+        <h2>FITUR DAN KEMAMPUAN UTAMA</h2>
+        <div class="grid-container">
+          <div class="feature-box">
+            <h3>Manajemen Aset</h3>
+            <ul>
+              <li>Pencatatan aset dengan detail lengkap</li>
+              <li>Pelacakan riwayat pemakaian dan pemeliharaan</li>
+              <li>Pengelolaan siklus hidup aset</li>
+              <li>Perhitungan depresiasi otomatis</li>
+            </ul>
+          </div>
+          <div class="feature-box">
+            <h3>Manajemen Gudang</h3>
+            <ul>
+              <li>Pemetaan lokasi penyimpanan</li>
+              <li>Optimasi tata letak penyimpanan</li>
+              <li>Manajemen batch dan tanggal kadaluarsa</li>
+              <li>Perhitungan kapasitas penyimpanan</li>
+            </ul>
+          </div>
+          <div class="feature-box">
+            <h3>Manajemen Persediaan</h3>
+            <ul>
+              <li>Pengelolaan stok minimum dan maksimum</li>
+              <li>Notifikasi level stok kritis</li>
+              <li>Peramalan kebutuhan material</li>
+              <li>Optimasi level persediaan</li>
+            </ul>
+          </div>
+          <div class="feature-box">
+            <h3>Transaksi dan Pelaporan</h3>
+            <ul>
+              <li>Pencatatan transaksi masuk dan keluar</li>
+              <li>Permintaan material otomatis</li>
+              <li>Pelaporan keuangan dan operasional</li>
+              <li>Dashboard analitik real-time</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+      <div class="slide-footer">
+        <span class="slide-number">Slide 7 dari 20</span>
+        <span>Sistem Inventaris Terintegrasi</span>
+      </div>
+    </div>
+    
+    <!-- Slide 8 -->
+    <div class="slide" id="slide8">
+      <div class="slide-header">
+        <img src="/api/placeholder/150/50" alt="Logo Pertamina" class="logo">
+        <h3>PT Pertamina Hulu Rokan Rantau Aceh Tamiang</h3>
+      </div>
+      
+      <div class="slide-content">
+        <h2>ARSITEKTUR SISTEM</h2>
+        <div class="chart-placeholder">
+          <p>Diagram Arsitektur Teknis Sistem Inventaris</p>
+        </div>
+        <div class="grid-container">
+          <div class="feature-box">
+            <h3>Lapisan Frontend</h3>
+            <ul>
+              <li>Antarmuka web berbasis HTML5/CSS3/JavaScript</li>
+              <li>Aplikasi mobile berbasis React Native</li>
+              <li>Dashboard analitik interaktif</li>
+              <li>Antarmuka scanning barcode/RFID</li>
+            </ul>
+          </div>
+          <div class="feature-box">
+            <h3>Lapisan Backend</h3>
+            <ul>
+              <li>API RESTful untuk komunikasi data</li>
+              <li>Microservices untuk modularitas dan skalabilitas</li>
+              <li>Sistem queuing untuk proses asinkron</li>
+              <li>Mesin analitik untuk peramalan dan optimasi</li>
+            </ul>
+          </div>
+          <div class="feature-box">
+            <h3>Infrastruktur</h3>
+            <ul>
+              <li>Deployment berbasis cloud (AWS/Azure)</li>
+              <li>Database relasional untuk transaksi</li>
+              <li>Database NoSQL untuk data analitik</li>
+              <li>Sistem caching untuk performa tinggi</li>
+            </ul>
+          </div>
+          <div class="feature-box">
+            <h3>Keamanan</h3>
+            <ul>
+              <li>Enkripsi data end-to-end</li>
+              <li>Otentikasi multi-faktor</li>
+              <li>Audit trail untuk semua aktivitas</li>
+              <li>Backup dan disaster recovery</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+      <div class="slide-footer">
+        <span class="slide-number">Slide 8 dari 20</span>
+        <span>Sistem Inventaris Terintegrasi</span>
+      </div>
+    </div>
+    
+    <!-- Slide 9 -->
+    <div class="slide" id="slide9">
+      <div class="slide-header">
+        <img src="/api/placeholder/150/50" alt="Logo Pertamina" class="logo">
+        <h3>PT Pertamina Hulu Rokan Rantau Aceh Tamiang</h3>
+      </div>
+      
+      <div class="slide-content">
+        <h2>KEAMANAN DATA DAN SISTEM</h2>
+        <p>Keamanan merupakan aspek kritis dari sistem inventaris yang mengelola aset bernilai tinggi dan data sensitif perusahaan.</p>
+        <div class="grid-container">
+          <div class="feature-box">
+            <h3>Keamanan Aplikasi</h3>
+            <ul>
+              <li>Perlindungan terhadap serangan OWASP Top 10</li>
+              <li>Pengujian keamanan berkala (penetration testing)</li>
+              <li>Validasi input dan sanitasi data</li>
+              <li>Pemantauan aktivitas yang mencurigakan</li>
+            </ul>
+          </div>
+          <div class="feature-box">
+            <h3>Keamanan Data</h3>
+            <ul>
+              <li>Enkripsi data sensitif dalam penyimpanan</li>
+              <li>Enkripsi komunikasi dengan TLS 1.3</li>
+              <li>Pengelolaan aman kunci enkripsi</li>
+              <li>Klasifikasi dan penanganan data sesuai sensitivitas</li>
+            </ul>
+          </div>
+          <div class="feature-box">
+            <h3>Manajemen Akses</h3>
+            <ul>
+              <li>Kontrol akses berbasis peran (RBAC)</li>
+              <li>Prinsip hak akses minimal (least privilege)</li>
+              <li>Otentikasi terpadu dengan sistem perusahaan</li>
+              <li>Pembatasan akses berdasarkan lokasi</li>
+            </ul>
+          </div>
+          <div class="feature-box">
+            <h3>Kepatuhan & Audit</h3>
+            <ul>
+              <li>Pencatatan log aktivitas komprehensif</li>
+              <li>Pelaporan insiden keamanan otomatis</li>
+              <li>Kepatuhan terhadap standar industri (ISO 27001)</li>
+              <li>Audit keamanan berkala</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+      <div class="slide-footer">
+        <span class="slide-number">Slide 9 dari 20</span>
+        <span>Sistem Inventaris Terintegrasi</span>
+      </div>
+    </div>
+    
+    <!-- Slide 10 -->
+    <div class="slide" id="slide10">
+      <div class="slide-header">
+        <img src="/api/placeholder/150/50" alt="Logo Pertamina" class="logo">
+        <h3>PT Pertamina Hulu Rokan Rantau Aceh Tamiang</h3>
+      </div>
+      
+      <div class="slide-content">
+        <h2>INTEGRASI DENGAN SISTEM LAIN</h2>
+        <div class="chart-placeholder">
+          <p>Diagram Integrasi Sistem</p>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Sistem</th>
+              <th>Tipe Integrasi</th>
+              <th>Data yang Dipertukarkan</th>
+              <th>Frekuensi</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>SAP ERP</td>
+              <td>Bidirectional API</td>
+              <td>Data keuangan, pembelian, dan aset</td>
+              <td>Real-time</td>
+            </tr>
+            <tr>
+              <td>Sistem Pemeliharaan</td>
+              <td>REST API</td>
+              <td>Jadwal pemeliharaan, kebutuhan suku cadang</td>
+              <td>Setiap jam</td>
+            </tr>
+            <tr>
+              <td>Sistem Pengadaan</td>
+              <td>Webhook</td>
+              <td>Permintaan pembelian, status pesanan</td>
+              <td>Real-time</td>
+            </tr>
+            <tr>
+              <td>Sistem Produksi</td>
+              <td>Message Queue</td>
+              <td>Kebutuhan material, penggunaan material</td>
+              <td>Near real-time</td>
+            </tr>
+            <tr>
+              <td>Sistem Keamanan</td>
+              <td>LDAP/SSO</td>
+              <td>Autentikasi dan otorisasi pengguna</td>
+              <td>Saat login</td>
+            </tr>
+            <tr>
+              <td>Sistem BI & Analytics</td>
+              <td>ETL Pipeline</td>
+              <td>Data historis untuk analisis</td>
+              <td>Harian</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="slide-footer">
+        <span class="slide-number">Slide 10 dari 20</span>
+        <span>Sistem Inventaris Terintegrasi</span>
+      </div>
+    </div>
+    
+    <!-- Slide 11 -->
+    <div class="slide" id="slide11">
+      <div class="slide-header">
+        <img src="/api/placeholder/150/50" alt="Logo Pertamina" class="logo">
+        <h3>PT Pertamina Hulu Rokan Rantau Aceh Tamiang</h3>
+      </div>
+      
+      <div class="slide-content">
+        <h2>MANFAAT IMPLEMENTASI</h2>
+        <div class="grid-container">
+          <div class="feature-box">
+            <h3>Manfaat Finansial</h3>
+            <ul>
+              <li>Pengurangan biaya penyimpanan hingga 20%</li>
+              <li>Pengurangan nilai persediaan sebesar 15-25%</li>
+              <li>Pengurangan kehilangan aset hingga 90%</li>
+              <li>Pengurangan biaya pembelian darurat sebesar 30%</li>
+              <li>Penghematan biaya SDM untuk administrasi inventaris</li>
+            </ul>
+          </div>
+          <div class="feature-box">
+            <h3>Manfaat Operasional</h3>
+            <ul>
+              <li>Peningkatan akurasi inventaris mencapai 99.5%</li>
+              <li>Pengurangan waktu pencarian material sebesar 70%</li>
+              <li>Peningkatan ketersediaan material hingga 95%</li>
+              <li>Pengurangan waktu stock-taking sebesar 80%</li>
+              <li>Pencegahan kekurangan stok (stockouts)</li>
+            </ul>
+          </div>
+        </div>
+        <div class="chart-placeholder">
+          <p>Grafik Perbandingan Before-After Implementasi</p>
+        </div>
+        <p>Estimasi ROI dalam 2 tahun implementasi: <strong>235%</strong> dengan payback period <strong>10 bulan</strong></p>
+      </div>
+      
+      <div class="slide-footer">
+        <span class="slide-number">Slide 11 dari 20</span>
+        <span>Sistem Inventaris Terintegrasi</span>
+      </div>
+    </div>
+    
+    <!-- Slide 12 -->
+    <div class="slide" id="slide12">
+      <div class="slide-header">
+        <img src="/api/placeholder/150/50" alt="Logo Pertamina" class="logo">
+        <h3>PT Pertamina Hulu Rokan Rantau Aceh Tamiang</h3>
+      </div>
+      
+      <div class="slide-content">
+        <h2>ANALISIS BIAYA DAN PENGEMBALIAN INVESTASI</h2>
+        <div class="grid-container">
+          <div class="feature-box">
+            <h3>Biaya Implementasi</h3>
+            <table>
+              <tr>
+                <td>Pengembangan Software</td>
+                <td>Rp 1,5 Miliar</td>
+              </tr>
+              <tr>
+                <td>Hardware dan Infrastruktur</td>
+                <td>Rp 850 Juta</td>
+              </tr>
+              <tr>
+                <td>Integrasi Sistem</td>
+                <td>Rp 600 Juta</td>
+              </tr>
+              <tr>
+                <td>Pelatihan dan Change Management</td>
+                <td>Rp 450 Juta</td>
+              </tr>
+              <tr>
+                <td><strong>Total Biaya Awal</strong></td>
+                <td><strong>Rp 3,4 Miliar</strong></td>
+              </tr>
+            </table>
+          </div>
+          <div class="feature-box">
+            <h3>Biaya Operasional Tahunan</h3>
+            <table>
+              <tr>
+                <td>Pemeliharaan Software</td>
+                <td>Rp 225 Juta</td>
+              </tr>
+              <tr>
+                <td>Pemeliharaan Hardware</td>
+                <td>Rp 150 Juta</td>
+              </tr>
+              <tr>
+                <td>Lisensi dan Layanan Cloud</td>
+                <td>Rp 300 Juta</td>
+              </tr>
+              <tr>
+                <td>Support dan Pembaruan</td>
+                <td>Rp 175 Juta</td>
+              </tr>
+              <tr>
+                <td><strong>Total Biaya Tahunan</strong></td>
+                <td><strong>Rp 850 Juta</strong></td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="chart-placeholder">
+          <p>Grafik Analisis ROI 5 Tahun</p>
+        </div>
+        <table>
+          <tr>
+            <th>Parameter</th>
+            <th>Nilai</th>
+          </tr>
+          <tr>
+            <td>Total Biaya 5 Tahun</td>
+            <td>Rp 7,65 Miliar</td>
+          </tr>
+          <tr>
+            <td>Total Penghematan 5 Tahun</td>
+            <td>Rp 25,6 Miliar</td>
+          </tr>
+          <tr>
+            <td>Net Present Value (NPV)</td>
+            <td>Rp 14,2 Miliar</td>
+          </tr>
+          <tr>
+            <td>Internal Rate of Return (IRR)</td>
+            <td>127%</td>
+          </tr>
+          <tr>
+            <td>Payback Period</td>
+            <td>10 Bulan</td>
+          </tr>
+        </table>
+      </div>
+      
+      <div class="slide-footer">
+        <span class="slide-number">Slide 12 dari 20</span>
+        <span>Sistem Inventaris Terintegrasi</span>
+      </div>
+    </div>
+    
+    <!-- Slide 13 -->
+    <div class="slide" id="slide13">
+      <div class="slide-header">
+        <img src="/api/placeholder/150/50" alt="Logo Pertamina" class="logo">
+        <h3>PT Pertamina Hulu Rokan Rantau Aceh Tamiang</h3>
+      </div>
+      
+      <div class="slide-content">
+        <h2>STRATEGI IMPLEMENTASI DAN TIMELINE</h2>
+        <p>Implementasi sistem inventaris akan dilakukan dengan pendekatan bertahap untuk meminimalkan gangguan operasional.</p>
+        <div class="timeline">
+          <div class="timeline-item">
+            <h3>Fase 1: Persiapan (2 Bulan)</h3>
+            <ul>
+              <li>Finalisasi persyaratan dan desain</li>
+              <li>Pemilihan teknologi dan vendor</li>
+              <li>Persiapan infrastruktur</li>
+            </ul>
+          </div>
+          <div class="timeline-item">
+            <h3>Fase 2: Pengembangan Inti (4 Bulan)</h3>
+            <ul>
+              <li>Pengembangan modul manajemen aset</li>
+              <li>Pengembangan modul manajemen gudang</li>
+              <li>Integrasi dengan sistem yang ada</li>
+            </ul>
+          </div>
+          <div class="timeline-item">
+            <h3>Fase 3: Implementasi Pilot (2 Bulan)</h3>
+            <ul>
+              <li>Implementasi di satu lokasi untuk validasi</li>
+              <li>Pengujian dan penyesuaian</li>
+              <li>Pelatihan pengguna awal</li>
+            </ul>
+          </div>
+          <div class="timeline-item">
+            <h3>Fase 4: Implementasi Penuh (3 Bulan)</h3>
+            <ul>
+              <li>Peluncuran bertahap di semua lokasi</li>
+              <li>Migrasi data dari sistem lama</li>
+              <li>Pelatihan pengguna secara luas</li>
+            </ul>
+          </div>
+          <div class="timeline-item">
+            <h3>Fase 5: Stabilisasi dan Optimasi (3 Bulan)</h3>
+            <ul>
+              <li>Pemantauan dan penyesuaian performa</li>
+              <li>Penyempurnaan fitur berdasarkan umpan balik</li>
+              <li>Dokumentasi lengkap dan transfer pengetahuan</li>
+            </ul>
+          </div>
+        </div>
+        <p>Total waktu implementasi: <strong>14 bulan</strong> dengan milestone review di setiap akhir fase</p>
+      </div>
+      
+      <div class="slide-footer">
+        <span class="slide-number">Slide 13 dari 20</span>
+        <span>Sistem Inventaris Terintegrasi</span>
+      </div>
+    </div>
+    
+    <!-- Slide 14 -->
+    <div class="slide" id="slide14">
+      <div class="slide-header">
+        <img src="/api/placeholder/150/50" alt="Logo Pertamina" class="logo">
+        <h3>PT Pertamina Hulu Rokan Rantau Aceh Tamiang</h3>
+      </div>
+      
+      <div class="slide-content">
+        <h2>MANAJEMEN PERUBAHAN DAN PELATIHAN</h2>
+        <p>Keberhasilan sistem baru sangat tergantung pada penerimaan pengguna dan adopsi yang efektif.</p>
+        <div class="grid-container">
+          <div class="feature-box">
+            <h3>Strategi Manajemen Perubahan</h3>
+            <ul>
+              <li>Pembentukan tim champion dari setiap departemen</li>
+              <li>Komunikasi reguler tentang kemajuan proyek</li>
+              <li>Identifikasi dan mitigasi resistensi</li>
+              <li>Keterlibatan pengguna dalam desain dan pengujian</li>
+            </ul>
+          </div>
+          <div class="feature-box">
+            <h3>Program Pelatihan</h3>
+            <ul>
+              <li>Modul pelatihan berbasis peran pengguna</li>
+              <li>Kombinasi pelatihan formal dan on-the-job</li>
+              <li>Materi pelatihan dalam bahasa Indonesia</li>
+              <li>Sertifikasi pengguna untuk sistem baru</li>
+            </ul>
+          </div>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Grup Pengguna</th>
+              <th>Jenis Pelatihan</th>
+              <th>Durasi</th>
+              <th>Frekuensi</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Admin Sistem</td>
+              <td>Teknis mendalam</td>
+              <td>5 hari</td>
+              <td>Pre-launch</td>
+            </tr>
+            <tr>
+              <td>Staf Gudang</td>
+              <td>Operasional menyeluruh</td>
+              <td>3 hari</td>
+              <td>Pre-launch & refresher</td>
+            </tr>
+            <tr>
+              <td>Petugas Lapangan</td>
+              <td>Aplikasi mobile & scanning</td>
+              <td>2 hari</td>
+              <td>Pre-launch & refresher</td>
+            </tr>
+            <tr>
+              <td>Manajemen</td>
+              <td>Dashboard & pelaporan</td>
+              <td>1 hari</td>
+              <td>Pre-launch</td>
+            </tr>
+            <tr>
+              <td>Semua Pengguna</td>
+              <td>Pengenalan umum</td>
+              <td>½ hari</td>
+              <td>Pre-launch</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="slide-footer">
+        <span class="slide-number">Slide 14 dari 20</span>
+        <span>Sistem Inventaris Terintegrasi</span>
+      </div>
+    </div>
+    
+    <!-- Slide 15 -->
+    <div class="slide" id="slide15">
+      <div class="slide-header">
+        <img src="/api/placeholder/150/50" alt="Logo Pertamina" class="logo">
+        <h3>PT Pertamina Hulu Rokan Rantau Aceh Tamiang</h3>
+      </div>
+      
+      <div class="slide-content">
+        <h2>DUKUNGAN TEKNIS DAN PEMELIHARAAN</h2>
+        <p>Sistem inventaris membutuhkan dukungan berkelanjutan untuk memastikan operasi yang lancar dan adaptasi dengan kebutuhan bisnis yang berubah.</p>
+        <div class="grid-container">
+          <div class="feature-box">
+            <h3>Model Dukungan Teknis</h3>
+            <ul>
+              <li>Tim helpdesk 24/7 untuk isu kritis</li>
+              <li>Sistem tiket untuk pelaporan masalah</li>
+              <li>SLA (Service Level Agreement) yang jelas</li>
+              <li>Tingkatan dukungan (Level 1-3)</li>
+            </ul>
+          </div>
+          <div class="feature-box">
+            <h3>Pemeliharaan Rutin</h3>
+            <ul>
+              <li>Patching dan update keamanan</li>
+              <li>Backup data terjadwal</li>
+              <li>Pemeliharaan database</li>
+              <li>Peningkatan performa sistem</li>
+            </ul>
+          </div>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Prioritas Tiket</th>
+              <th>Definisi</th>
+              <th>Respon Awal</th>
+              <th>Target Resolusi</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>P1 (Kritis)</td>
+              <td>Sistem tidak berfungsi, operasi terhenti</td>
+              <td>15 menit</td>
+              <td>4 jam</td>
+            </tr>
+            <tr>
+              <td>P2 (Tinggi)</td>
+              <td>Fungsi utama terpengaruh, ada workaround</td>
+              <td>30 menit</td>
+              <td>8 jam</td>
+            </tr>
+            <tr>
+              <td>P3 (Sedang)</td>
+              <td>Fungsi minor terpengaruh</td>
+              <td>4 jam</td>
+              <td>24 jam</td>
+            </tr>
+            <tr>
+              <td>P4 (Rendah)</td>
+              <td>Pertanyaan, permintaan fitur</td>
+              <td>24 jam</td>
+              <td>5 hari kerja</td>
+            </tr>
+          </tbody>
+        </table>
+        <p>Rencana pemeliharaan jangka panjang termasuk peningkatan besar setiap 2 tahun dan evaluasi kebutuhan teknologi setiap tahun.</p>
+      </div>
+      
+      <div class="slide-footer">
+        <span class="slide-number">Slide 15 dari 20</span>
+        <span>Sistem Inventaris Terintegrasi</span>
+      </div>
+    </div>
+    
+    <!-- Slide 16 -->
+    <div class="slide" id="slide16">
+      <div class="slide-header">
+        <img src="/api/placeholder/150/50" alt="Logo Pertamina" class="logo">
+        <h3>PT Pertamina Hulu Rokan Rantau Aceh Tamiang</h3>
+      </div>
+      
+      <div class="slide-content">
+        <h2>INDIKATOR KINERJA UTAMA</h2>
+        <p>Keberhasilan implementasi sistem akan diukur melalui serangkaian KPI yang mencakup aspek operasional, keuangan, dan pengguna.</p>
+        <div class="grid-container">
+          <div class="feature-box">
+            <h3>KPI Operasional</h3>
+            <table>
+              <tr>
+                <td>Akurasi Inventaris</td>
+                <td>> 99%</td>
+              </tr>
+              <tr>
+                <td>Waktu Stock-taking</td>
+                <td>< 2 hari</td>
+              </tr>
+              <tr>
+                <td>Tingkat Ketersediaan Stok</td>
+                <td>> 95%</td>
+              </tr>
+              <tr>
+                <td>Waktu Pemenuhan Permintaan</td>
+                <td>< 24 jam</td>
+              </tr>
+              <tr>
+                <td>Tingkat Kehilangan Aset</td>
+                <td>< 0.5%</td>
+              </tr>
+            </table>
+          </div>
+          <div class="feature-box">
+            <h3>KPI Keuangan</h3>
+            <table>
+              <tr>
+                <td>Pengurangan Nilai Persediaan</td>
+                <td>> 15%</td>
+              </tr>
+              <tr>
+                <td>Pengurangan Biaya Penyimpanan</td>
+                <td>> 20%</td>
+              </tr>
+              <tr>
+                <td>ROI pada Tahun Kedua</td>
+                <td>> 200%</td>
+              </tr>
+              <tr>
+                <td>Biaya Pemeliharaan Aset</td>
+                <td>< -10%</td>
+              </tr>
+              <tr>
+                <td>Efisiensi Biaya Operasional</td>
+                <td>> 12%</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="chart-placeholder">
+          <p>Dashboard KPI Sistem Inventaris</p>
+        </div>
+        <p>Pemantauan KPI akan dilakukan secara bulanan dengan pelaporan ke manajemen eksekutif secara triwulanan.</p>
+      </div>
+      
+      <div class="slide-footer">
+        <span class="slide-number">Slide 16 dari 20</span>
+        <span>Sistem Inventaris Terintegrasi</span>
+      </div>
+    </div>
+    
+    <!-- Slide 17 -->
+    <div class="slide" id="slide17">
+      <div class="slide-header">
+        <img src="/api/placeholder/150/50" alt="Logo Pertamina" class="logo">
+        <h3>PT Pertamina Hulu Rokan Rantau Aceh Tamiang</h3>
+      </div>
+      
+      <div class="slide-content">
+        <h2>ANALISIS RISIKO DAN MITIGASI</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Risiko</th>
+              <th>Probabilitas</th>
+              <th>Dampak</th>
+              <th>Strategi Mitigasi</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Resistensi pengguna terhadap perubahan</td>
+              <td>Tinggi</td>
+              <td>Tinggi</td>
+              <td>Program manajemen perubahan komprehensif, keterlibatan pengguna sejak tahap awal</td>
+            </tr>
+            <tr>
+              <td>Integrasi yang kompleks dengan sistem yang ada</td>
+              <td>Tinggi</td>
+              <td>Tinggi</td>
+              <td>POC (Proof of Concept) awal, pendekatan bertahap, tim integrasi khusus</td>
+            </tr>
+            <tr>
+              <td>Kualitas data awal yang rendah</td>
+              <td>Sedang</td>
+              <td>Tinggi</td>
+              <td>Audit data awal, strategi pembersihan data, validasi data sebelum migrasi</td>
+            </tr>
+            <tr>
+              <td>Masalah konektivitas di lapangan</td>
+              <td>Sedang</td>
+              <td>Sedang</td>
+              <td>Kemampuan offline, sinkronisasi otomatis, bandwidth rendah operasi</td>
+            </tr>
+            <tr>
+              <td>Overrun biaya dan jadwal</td>
+              <td>Sedang</td>
+              <td>Tinggi</td>
+              <td>Manajemen proyek yang ketat, buffer anggaran 15%, milestone yang jelas</td>
+            </tr>
+            <tr>
+              <td>Keamanan data dan akses tidak sah</td>
+              <td>Rendah</td>
+              <td>Sangat Tinggi</td>
+              <td>Enkripsi data, audit akses, pen-testing rutin, kepatuhan keamanan</td>
+            </tr>
+            <tr>
+              <td>Perubahan persyaratan selama implementasi</td>
+              <td>Tinggi</td>
+              <td>Sedang</td>
+              <td>Metodologi Agile, freezing persyaratan inti, pengelolaan perubahan</td>
+            </tr>
+            <tr>
+              <td>Performa sistem di bawah ekspektasi</td>
+              <td>Rendah</td>
+              <td>Sedang</td>
+              <td>Pengujian beban di awal, arsitektur yang skalabel, monitoring performa</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="chart-placeholder">
+          <p>Matrix Risiko (Probabilitas vs Dampak)</p>
+        </div>
+      </div>
+      
+      <div class="slide-footer">
+        <span class="slide-number">Slide 17 dari 20</span>
+        <span>Sistem Inventaris Terintegrasi</span>
+      </div>
+    </div>
+    
+    <!-- Slide 18 -->
+    <div class="slide" id="slide18">
+      <div class="slide-header">
+        <img src="/api/placeholder/150/50" alt="Logo Pertamina" class="logo">
+        <h3>PT Pertamina Hulu Rokan Rantau Aceh Tamiang</h3>
+      </div>
+      
+      <div class="slide-content">
+        <h2>PETA JALAN PENGEMBANGAN MASA DEPAN</h2>
+        <p>Sistem inventaris akan terus berkembang setelah implementasi awal untuk mengakomodasi kebutuhan bisnis dan kemajuan teknologi.</p>
+        <div class="timeline">
+          <div class="timeline-item">
+            <h3>Fase 1: Stabilisasi (0-6 bulan setelah go-live)</h3>
+            <ul>
+              <li>Perbaikan bug dan peningkatan performa</li>
+              <li>Penyesuaian laporan dan dashboard</li>
+              <li>Peningkatan user experience berdasarkan umpan balik</li>
+            </ul>
+          </div>
+          <div class="timeline-item">
+            <h3>Fase 2: Perluasan (6-12 bulan)</h3>
+            <ul>
+              <li>Integrasi dengan sistem tambahan</li>
+              <li>Implementasi di lokasi tambahan</li>
+              <li>Peningkatan kemampuan analitik</li>
+            </ul>
+          </div>
+          <div class="timeline-item">
+            <h3>Fase 3: Optimasi (12-24 bulan)</h3>
+            <ul>
+              <li>Implementasi AI untuk peramalan permintaan</li>
+              <li>Otomatisasi proses pengadaan</li>
+              <li>Integrasi dengan IoT untuk pelacakan aset</li>
+            </ul>
+          </div>
+          <div class="timeline-item">
+            <h3>Fase 4: Transformasi (24-36 bulan)</h3>
+            <ul>
+              <li>Implementasi blockchain untuk rantai pasokan</li>
+              <li>Augmented reality untuk panduan teknis</li>
+              <li>Integrasi dengan digital twins aset fisik</li>
+            </ul>
+          </div>
+        </div>
+        <div class="chart-placeholder">
+          <p>Visualisasi Roadmap Teknologi</p>
+        </div>
+      </div>
+      
+      <div class="slide-footer">
+        <span class="slide-number">Slide 18 dari 20</span>
+        <span>Sistem Inventaris Terintegrasi</span>
+      </div>
+    </div>
+    
+    <!-- Slide 19 -->
+    <div class="slide" id="slide19">
+      <div class="slide-header">
+        <img src="/api/placeholder/150/50" alt="Logo Pertamina" class="logo">
+        <h3>PT Pertamina Hulu Rokan Rantau Aceh Tamiang</h3>
+      </div>
+      
+      <div class="slide-content">
+        <h2>REKOMENDASI</h2>
+        <div class="feature-box">
+          <h3>Rekomendasi Utama</h3>
+          <p>Berdasarkan analisis menyeluruh, kami merekomendasikan untuk melanjutkan implementasi Sistem Inventaris Terintegrasi dengan pendekatan bertahap seperti yang diuraikan dalam presentasi ini.</p>
+        </div>
+        <div class="grid-container">
+          <div class="feature-box">
+            <h3>Langkah-langkah Segera</h3>
+            <ol>
+              <li>Pembentukan Tim Proyek Inti dalam 2 minggu</li>
+              <li>Finalisasi persyaratan sistem dalam 1 bulan</li>
+              <li>Pemilihan teknologi dan vendor dalam 6 minggu</li>
+              <li>Pengembangan rencana implementasi detail dalam 2 bulan</li>
+              <li>Komunikasi kickoff kepada seluruh stakeholder</li>
+            </ol>
+          </div>
+          <div class="feature-box">
+            <h3>Faktor Penentu Kesuksesan</h3>
+            <ul>
+              <li>Dukungan kuat dari manajemen senior</li>
+              <li>Keterlibatan pengguna sejak tahap awal</li>
+              <li>Komunikasi jelas tentang tujuan dan manfaat</li>
+              <li>Pelatihan komprehensif bagi semua pengguna</li>
+              <li>Manajemen perubahan yang efektif</li>
+            </ul>
+          </div>
+        </div>
+        <div class="feature-box">
+          <h3>Pertimbangan Penting</h3>
+          <ul>
+            <li>Standardisasi proses bisnis inventaris sebelum implementasi teknologi</li>
+            <li>Persiapan data berkualitas tinggi untuk migrasi</li>
+            <li>Alokasi sumber daya yang memadai untuk manajemen perubahan</li>
+            <li>Pengembangan metrik yang jelas untuk mengukur keberhasilan</li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="slide-footer">
+        <span class="slide-number">Slide 19 dari 20</span>
+        <span>Sistem Inventaris Terintegrasi</span>
+      </div>
+    </div>
+    
+    <!-- Slide 20 -->
+    <div class="slide" id="slide20">
+      <div class="slide-header">
+        <img src="/api/placeholder/150/50" alt="Logo Pertamina" class="logo">
+        <h3>PT Pertamina Hulu Rokan Rantau Aceh Tamiang</h3>
+      </div>
+      
+      <div class="slide-content center-content">
+        <h2>KESIMPULAN</h2>
+        <div class="feature-box">
+          <p>Sistem Inventaris Terintegrasi yang diusulkan akan memberikan transformasi signifikan dalam pengelolaan aset dan persediaan PT Pertamina Hulu Rokan Rantau Aceh Tamiang, dengan manfaat yang jelas dalam aspek:</p>
+          <ul>
+            <li>Efisiensi operasional yang lebih tinggi</li>
+            <li>Penghematan biaya yang substansial</li>
+            <li>Pengambilan keputusan berbasis data yang lebih baik</li>
+            <li>Kepatuhan dan tata kelola yang ditingkatkan</li>
+            <li>Landasan yang kuat untuk transformasi digital lebih lanjut</li>
+          </ul>
+        </div>
+        <p>Investasi ini diproyeksikan akan memberikan ROI 235% dalam 2 tahun dengan payback period 10 bulan.</p>
+        <div class="chart-placeholder">
+          <p>Visualisasi Transformasi Sistem Inventaris</p>
+        </div>
+        <div class="contact-info">
+          <div class="contact-card">
+            <h3>Tim Proyek</h3>
+            <p>Email: proyek.inventaris@pertamina.com</p>
+            <p>Telepon: 021-1234567</p>
+          </div>
+          <div class="contact-card">
+            <h3>Dukungan Teknis</h3>
+            <p>Email: support.inventaris@pertamina.com</p>
+            <p>Telepon: 021-7654321</p>
+          </div>
+          <div class="contact-card">
+            <h3>Manajemen</h3>
+            <p>Email: manajemen@pertamina.com</p>
+            <p>Telepon: 021-5555555</p>
+          </div>
+        </div>
+        <p>Terima Kasih</p>
+      </div>
+      
+      <div class="slide-footer">
+        <span class="slide-number">Slide 20 dari 20</span>
+        <span>Sistem Inventaris Terintegrasi</span>
+      </div>
+    </div>
+    
+    <!-- Navigation buttons -->
+    <div class="navigation">
+      <button class="nav-btn" id="prev-btn" disabled>&larr;</button>
+      <button class="nav-btn" id="next-btn">&rarr;</button>
+    </div>
+  </div>
+  
+  <script>
+    const slides = document.querySelectorAll('.slide');
+    let currentSlide = 0;
+    
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
+    
+    function showSlide(n) {
+      slides[currentSlide].classList.remove('active');
+      currentSlide = (n + slides.length) % slides.length;
+      slides[currentSlide].classList.add('active');
+      
+      prevBtn.disabled = currentSlide === 0;
+      nextBtn.disabled = currentSlide === slides.length - 1;
+      
+      // Update slide number
+      const slideFooters = document.querySelectorAll('.slide-footer .slide-number');
+      slideFooters.forEach(footer => {
+        footer.textContent = `Slide ${currentSlide + 1} dari ${slides.length}`;
+      });
+    }
+    
+    prevBtn.addEventListener('click', () => {
+      showSlide(currentSlide - 1);
+    });
+    
+    nextBtn.addEventListener('click', () => {
+      showSlide(currentSlide + 1);
+    });
+    
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft' && currentSlide > 0) {
+        showSlide(currentSlide - 1);
+      } else if (e.key === 'ArrowRight' && currentSlide < slides.length - 1) {
+        showSlide(currentSlide + 1);
+      }
+    });
+    
+    // Initialize
+    showSlide(0);
+  </script>
+</body>
+</html>
